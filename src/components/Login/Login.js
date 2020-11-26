@@ -1,18 +1,19 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { Alert } from "react-bs-notifier";
-
-import { useUser } from '../../contexts/UserContext';
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
+import { useUser } from '../../contexts/UserContext';
+import './Login.css';
 
-export default function Login({ show, handleLoginClose }) {
+export default function LoginTest() {
+    let history = useHistory();
+
     const [validated, setValidated] = useState(false);
-    const { user, setUser } = useUser();
+    const { setUser } = useUser();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [alerts, setAlerts] = useState([]);
+
     const onSubmitAcessar = event => {
         const form = event.currentTarget;
 
@@ -26,71 +27,53 @@ export default function Login({ show, handleLoginClose }) {
         event.preventDefault();
         setValidated(false);
 
-        event.preventDefault();
-
-        axios.post('https://localhost:5001/api/users/login', { password, username })
+        axios.post('https://localhost:5001/api/login', { password, username })
             .then(resultado => {
                 setUser({
                     username,
                     authenticated: true,
                     ...resultado.data
-                })
+                });
+
+                history.push("/");
             });
-
-        handleLoginClose()
-    }
-
-    const doNothing = () => {
-        console.log('foi');
     }
 
     return (
-        <>
-            {/* <Alert position={'bottom-right'} timeout={'3000'} onDismiss={doNothing} type={'danger'} headline={'Erro'}>
-                Erro ao logar
-            </Alert> */}
-
-            <Modal show={show} onHide={handleLoginClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Acessar</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form noValidate validated={validated} onSubmit={onSubmitAcessar}>
-                        <Form.Group controlId="formBasicLogin">
-                            <Form.Label>Login</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                placeholder="Login"
-                                value={username}
-                                onChange={e => setUsername(e.target.value)}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Insira um usuario.
+        <Form noValidate validated={validated} onSubmit={onSubmitAcessar} className="form-signin">
+            <h3 className="text-center" id="desorganizze-titulo">Desorganizze</h3>
+            <Form.Group controlId="formBasicLogin">
+                <Form.Label>Login</Form.Label>
+                <Form.Control
+                    required
+                    type="text"
+                    placeholder="Login"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                />
+                <Form.Control.Feedback type="invalid">
+                    Insira um usuario.
                         </Form.Control.Feedback>
-                        </Form.Group>
+            </Form.Group>
 
-                        <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                required
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Insira um usuario.
+            <Form.Group controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                    required
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                />
+                <Form.Control.Feedback type="invalid">
+                    Insira um usuario.
                         </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group>
-                            <Button variant="primary" type="submit" block>
-                                Acessar
-                        </Button>
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-        </>
+            </Form.Group>
+            <Form.Group>
+                <Button variant="success" type="submit" block>
+                    Acessar
+                </Button>
+            </Form.Group>
+        </Form>
     );
 }

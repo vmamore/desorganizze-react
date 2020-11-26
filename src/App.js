@@ -1,13 +1,23 @@
 import React from 'react';
-import MyNavbar from './components/UI/Navbar/MyNavbar';
+import PrivateRoute from './components/PrivateRoute';
 import Home from './components/Home/Home';
 import UserProvider from './contexts/UserContext';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Login from './components/Login/Login';
 
 function App() {
   return (
     <UserProvider>
-      <MyNavbar />
-      <Home />
+      <Router>
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <PrivateRoute path="/">
+            <Home />
+          </PrivateRoute>
+        </Switch>
+      </Router>
     </UserProvider>
   );
 }
