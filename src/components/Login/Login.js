@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import { useUser } from '../../contexts/UserContext';
 import './Login.css';
+import API from '../../utils/API';
 
 export default function LoginTest() {
     let history = useHistory();
@@ -27,16 +27,16 @@ export default function LoginTest() {
         event.preventDefault();
         setValidated(false);
 
-        axios.post('https://localhost:5001/api/login', { password, username })
-            .then(resultado => {
-                setUser({
-                    username,
-                    authenticated: true,
-                    ...resultado.data
-                });
-
-                history.push("/");
+        API.post('/login', { password, username })
+        .then(resultado => {
+            setUser({
+                username,
+                authenticated: true,
+                ...resultado.data
             });
+
+            history.push("/");
+        });
     }
 
     return (
