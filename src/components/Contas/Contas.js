@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useUser } from '../../contexts/UserContext';
 import API from '../../utils/API';
 
-export default function Transacoes() {
+export default function Contas() {
     const [modalNovaConta, setmodalNovaConta] = useState(false);
     const [accounts, setAccounts] = useState([]);
 
@@ -30,7 +30,7 @@ export default function Transacoes() {
                 {account.name}
             </td>
             <td>
-                {account.totalAmount}
+                R$ {account.totalAmount}
             </td>
         </tr>
     ));

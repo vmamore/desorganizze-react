@@ -10,6 +10,7 @@ export default function NovaTransacaoModal({ mostrarModalNovaTransacao, handleCl
     const [validated, setValidated] = useState(false);
     const [tipo, setTipo] = useState(tipos.ADICAO);
     const [accounts, setAccounts] = useState([]);
+    const [selectedAccountId, setSelectedAccountId] = useState({});
     const [valor, setValor] = useState(0);
     const [dataDeCriacao, setDataDeCriacao] = useState(new Date());
 
@@ -35,10 +36,11 @@ export default function NovaTransacaoModal({ mostrarModalNovaTransacao, handleCl
             setValidated(true);
             return;
         }
+        console.log(form);
 
         event.preventDefault();
         setValidated(false);
-        API.post('/transactions', {
+        API.post(`/wallets/${user.walletId}/accounts/${selectedAccountId}/transaction`, {
             type: tipo,
             amount: parseFloat(valor),
             dataDeCriacao,
@@ -50,11 +52,15 @@ export default function NovaTransacaoModal({ mostrarModalNovaTransacao, handleCl
     };
 
     const selectAccountsOptions = () => accounts.map((account, index) => (
-        <option>
+        <option value={account.id}>
             {account.name}
         </option>   
     ));
 
+    const onChangeAccount = (account) => {
+        console.log(account);
+        setSelectedAccountId(account);
+    };
     return (
         <>
             <Modal show={mostrarModalNovaTransacao} onHide={handleCloseNovaTransacao}>
@@ -90,7 +96,8 @@ export default function NovaTransacaoModal({ mostrarModalNovaTransacao, handleCl
                         </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group>
-                            <Form.Control as="select">
+                            <Form.Control as="select" onChange={e => onChangeAccount(e.target.value)} >
+                            <option value=""></option>
                             {
                                 accounts.length === 0 ? null : selectAccountsOptions() 
                             }

@@ -7,9 +7,16 @@ import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { useUser } from '../../../contexts/UserContext';
 import Transacoes from '../../Transacoes/Transacoes';
 import Contas from '../../Contas/Contas';
+import { useHistory } from "react-router-dom";
 
 function MyNavbar() {
-    const { user } = useUser();
+    const { user, setUser } = useUser();
+    let history = useHistory();
+
+    const logout = () => {
+        setUser({});
+        history.push('/login');
+    }
 
     return (
         <div>
@@ -21,7 +28,7 @@ function MyNavbar() {
                     <Nav.Link>
                         <Link to="/transacoes">Transações</Link>
                     </Nav.Link>
-                    <Nav.Link href="contas">
+                    <Nav.Link>
                         <Link to="/contas">Contas</Link>
                     </Nav.Link>
                 </Nav>
@@ -31,8 +38,8 @@ function MyNavbar() {
                             <FontAwesomeIcon icon={faUser} style={{ marginRight: '10px' }} /> Olá {user.name}!
                         </div>}
                     </Nav.Link>
-                    <Nav.Link>
-                        <FontAwesomeIcon icon={faUser} style={{ marginRight: '10px' }} /> Sair
+                    <Nav.Link onClick={logout}>
+                        <FontAwesomeIcon icon={faUser} style={{ marginRight: '10px' }}/> Sair
                     </Nav.Link>
                 </Nav>
             </Navbar.Collapse>
